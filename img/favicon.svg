@@ -1,0 +1,18 @@
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="34" width="34" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path opacity="0.85" stroke="#000" transform="rotate(46.45380401611328 16.00000762939453,15.404424667358398) " id="svg_4" d="m4.880621,21.129061l5.559697,-5.724626l0,2.862313l8.339534,0l0,-8.586939l-2.779847,0l5.559694,-5.724626l5.559694,5.724626l-2.779847,0l0,14.311565l-13.899226,0l0,2.862313l-5.559697,-5.724626l-0.000001,0z" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#007fff"/>
+  <path stroke="#000" opacity="0.85" id="svg_5" d="m7.37501,23.20724l17.24998,0l0,4.249987l-17.24998,0l0,-4.249987z" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#007fff"/>
+  <path stroke="#000" style="vector-effect: non-scaling-stroke;" transform="rotate(-0.18572713434696198 15.010940551757763,9.361398696899624) " id="svg_7" d="m15.010939,9.361391z" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#007fff"/>
+  <path opacity="0.64" stroke="#007fff" id="svg_26" d="m11.255006,9.546539l4.744994,-4.744994l4.744994,4.744994l-4.744994,4.744994l-4.744994,-4.744994z" fill-opacity="null" stroke-opacity="null" stroke-width="null" fill="none"/>
+  <path stroke="#007fff" id="svg_27" d="m13.625004,8.323174l1.151631,-1.151631l1.22336,1.22335l1.22336,-1.22335l1.151642,1.151631l-1.22336,1.22336l1.22336,1.22336l-1.151642,1.151642l-1.22336,-1.22336l-1.22336,1.22336l-1.151631,-1.151642l1.22335,-1.22336l-1.22335,-1.22336z" opacity="0.8" fill-opacity="null" stroke-opacity="null" stroke-width="null" fill="none"/>
+  <path stroke="#000" transform="rotate(135 16.000000000000004,23.354089736938473) " id="svg_31" d="m13.140186,26.213919l0,-5.71966l5.71963,5.71966l-5.71963,0z" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#007fff"/>
+ </g>
+</svg>
