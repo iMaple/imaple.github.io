@@ -1,0 +1,472 @@
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=format-detection content="telephone=no, date=no, address=no, email=no"><meta http-equiv=X-UA-Compatible content="IE=edge, chrome=1"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><meta name=generator content="Hugo 0.136.5 with theme icarus"><meta name=google-site-verification content="Xu4Z5XZHTM0KZM9KXO7c23fo02SKezOMlFfUjuBoi5U"><meta name=baidu-site-verification content="hdV6VMPvvZ"><meta name=author content><meta name=description content="排序算法是《数据结构与算法》中最基本的算法之一。
+排序算法可以分为内部排序和外部排序，内部排序是指数据记录在内存中进行排序，而外部排序是指因排序的数据量很大，一次不能在内存种中容纳全部的排序记录，因而在排序过程中需要访问外存。常见的内部排序算法有：插入排序、希尔排序、选择排序、冒泡排序、归并排序、快速排序、堆排序、基数排序等。
+通过比较元素的大小来决定元素间相对次序的排序也称为比较类排序，如经典的插入排序。由于这类排序时间复杂度不能突破O(nlogn)，因此也称为非线性时间比较类排序。而非比较类排序则可以突破基于比较排序的时间下界，以线性时间运行，因此也称为线性时间非比较类排序，如计数排序。
+"><meta name=keywords content><title>常见的十个排序算法 - 枫林's Blog</title>
+<meta name=application-name content="枫林's Blog"><meta name=msapplication-TileImage content="img/favicon.svg"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="枫林's Blog"><meta name=apple-mobile-web-app-status-bar-style content="default"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.imaple.net\/posts\/algorithm_sort\/"},"headline":"枫林\u0027s Blog","image":[],"dataPublished":"2020-04-18T18:42:15\u002b08:00","dataModified":"2020-05-10T19:32:45\u002b08:00","author":{"@type":"Person","name":""},"publisher":{"@type":"Organization","name":"","logo":{"@type":"ImageObject","url":"publisher_logo"}},"description":"\u003cp\u003e排序算法是《数据结构与算法》中最基本的算法之一。\u003c\/p\u003e\n\u003cp\u003e排序算法可以分为内部排序和外部排序，内部排序是指数据记录在内存中进行排序，而外部排序是指因排序的数据量很大，一次不能在内存种中容纳全部的排序记录，因而在排序过程中需要访问外存。常见的内部排序算法有：\u003cstrong\u003e插入排序、希尔排序、选择排序、冒泡排序、归并排序、快速排序、堆排序、基数排序\u003c\/strong\u003e等。\u003c\/p\u003e\n\u003cp\u003e通过比较元素的大小来决定元素间相对次序的排序也称为\u003cstrong\u003e比较类排序\u003c\/strong\u003e，如经典的\u003cstrong\u003e插入排序\u003c\/strong\u003e。由于这类排序时间复杂度不能突破\u003ccode\u003eO(nlogn)\u003c\/code\u003e，因此也称为非线性时间比较类排序。而\u003cstrong\u003e非比较类排序\u003c\/strong\u003e则可以突破基于比较排序的时间下界，以线性时间运行，因此也称为线性时间非比较类排序，如\u003cstrong\u003e计数排序\u003c\/strong\u003e。\u003c\/p\u003e"}</script><link rel=canonical href=https://blog.imaple.net/posts/algorithm_sort/><link rel=alternate href=https://blog.imaple.net/index.xml title="枫林's Blog" type=application/rss+xml><link rel=icon href=/img/favicon.svg><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/5.15.2/css/all.min.css><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/9.18.1/styles/atom-one-light.min.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel=stylesheet href=/css/default.css><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><script type=text/javascript src=https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js defer></script><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/cookieconsent/3.1.1/cookieconsent.min.css><script src="https://www.googletagmanager.com/gtag/js?id=G-6DQ842ZL2N" async></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-6DQ842ZL2N")</script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/pace/1.0.2/pace.min.js></script></head><body class=is-3-column><nav class="navbar navbar-main"><div class=container><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href=/><img src=/img/logo.svg alt=常见的十个排序算法 height=28></a></div><div class=navbar-menu><div class=navbar-start><a class=navbar-item href=/>主页</a>
+<a class=navbar-item href=/archives>归档</a>
+<a class=navbar-item href=/categories>分类</a>
+<a class=navbar-item href=/tags>标签</a>
+<a class=navbar-item href=/about>关于</a></div><div class=navbar-end><a class="navbar-item is-hidden-tablet catalogue" title=目录 href=javascript:;><i class="fas fa-list-ul"></i>
+</a><a class="navbar-item search" title=搜索 href=javascript:;><i class="fas fa-search"></i></a></div></div></div></nav><section class=section><div class=container><div class=columns><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class=card><div class=card-image><span class="image is-7by3"><img class=fill src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/62c5d5975a2c7725442e5733d44b76d5-8fdaf5.webp alt=常见的十个排序算法></span></div><article class="card-content article" role=article><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class=level-left><span class=level-item><time datetime=2020-04-18T18:42:15+08:00 title=2020-04-18T18:42:15+08:00>2020-04-18
+</time>发表
+</span><span class=level-item><time datetime=2020-05-10T19:32:45+08:00 title=2020-05-10T19:32:45+08:00>2020-05-10
+</time>更新
+</span><span class=level-item><a class=link-muted href=/categories/%e7%ae%97%e6%b3%95>算法</a>
+</span><span class=level-item>11 分钟读完 (大约5272个字)</span>
+<span class=level-item id=busuanzi_container_page_pv><span id=busuanzi_value_page_pv>0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">常见的十个排序算法</h1><div class=content><p>排序算法是《数据结构与算法》中最基本的算法之一。</p><p>排序算法可以分为内部排序和外部排序，内部排序是指数据记录在内存中进行排序，而外部排序是指因排序的数据量很大，一次不能在内存种中容纳全部的排序记录，因而在排序过程中需要访问外存。常见的内部排序算法有：<strong>插入排序、希尔排序、选择排序、冒泡排序、归并排序、快速排序、堆排序、基数排序</strong>等。</p><p>通过比较元素的大小来决定元素间相对次序的排序也称为<strong>比较类排序</strong>，如经典的<strong>插入排序</strong>。由于这类排序时间复杂度不能突破<code>O(nlogn)</code>，因此也称为非线性时间比较类排序。而<strong>非比较类排序</strong>则可以突破基于比较排序的时间下界，以线性时间运行，因此也称为线性时间非比较类排序，如<strong>计数排序</strong>。</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/beb6078387387dfbdb33e18079a61944-93dd47.webp alt=常见十大排序算法></p><h2 id=冒泡排序-bubble-sort>冒泡排序 (Bubble Sort)</h2><p>冒泡排序是一种简单直观的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。</p><h3 id=算法描述>算法描述</h3><ol><li>比较相邻的元素。如果第一个比第二个大，就交换他们两个。</li><li>对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。这步做完后，最后的元素会是最大的数。</li><li>针对所有的元素重复以上的步骤，除了最后一个。</li><li>重复步骤 1~3，直到排序完成。</li></ol><h3 id=动图演示>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/b7d216a5b292cf3a5412bbc7fbb56a9e-ab1856.gif alt=冒泡排序动图演示></p><h3 id=代码实现>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>bubbleSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;</span> <span class=nx>len</span> <span class=o>-</span> <span class=mi>1</span> <span class=o>-</span> <span class=nx>i</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=o>&gt;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]]</span> <span class=o>=</span> <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析>复杂度分析</h3><p>时间复杂度最坏的情况是反序序列，要比较 <code>n(n-1)/2</code> 次，时间复杂度为 <code>O(n^2)</code>，最好的情况是正序，只进行 <code>(n-1)</code> 次比较，不需要移动，时间复杂度为 <code>O(n)</code>，而平均的时间复杂度为 <code>O(n^2)</code>。冒泡排序是一种稳定的排序算法，元素较少时效率比较高。</p><h2 id=选择排序-selection-sort>选择排序 (Selection-sort)</h2><p>选择排序是一种简单直观的排序算法。它的工作原理：首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。</p><h3 id=算法描述-1>算法描述</h3><ol><li>首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置</li><li>再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。</li><li>重复第 2 步，直到所有元素均排序完毕。</li></ol><h3 id=动图演示-1>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/44be35da53ae9ee564ce444542a43d10-8277b8.gif alt=选择排序动图演示></p><h3 id=代码实现-1>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>selectionSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>minIndex</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>minIndex</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>j</span> <span class=o>=</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;</span> <span class=nx>len</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=o>&lt;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>minIndex</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>minIndex</span> <span class=o>=</span> <span class=nx>j</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>minIndex</span><span class=p>]]</span> <span class=o>=</span> <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>minIndex</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-1>复杂度分析</h3><p>表现最稳定的排序算法之一，因为无论什么数据进去都是 <code>O(n^2)</code> 的时间复杂度，所以用到它的时候，数据规模越小越好。唯一的好处可能就是不占用额外的内存空间了吧。</p><h2 id=插入排序-insertion-sort>插入排序 (Insertion Sort)</h2><p>插入排序是一种最简单直观的排序算法，它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。</p><p>插入排序和冒泡排序一样，有一种优化算法，叫做拆半插入。</p><h3 id=算法描述-2>算法描述</h3><ol><li>从第一个元素开始，该元素可以认为已经被排序；</li><li>取出下一个元素，在已经排序的元素序列中从后向前扫描；</li><li>如果该元素（已排序）大于新元素，将该元素移到下一位置；</li><li>重复步骤 3，直到找到已排序的元素小于或者等于新元素的位置；</li><li>将新元素插入到该位置后；</li><li>重复步骤 2~5。</li></ol><h3 id=动图演示-2>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/be81c151f38d8923fe1ede31ac530ac4-3118ee.gif alt=插入排序动图演示></p><h3 id=代码实现-2>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>insertionSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>preIndex</span><span class=p>,</span> <span class=nx>current</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>len</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>preIndex</span> <span class=o>=</span> <span class=nx>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>current</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=p>(</span><span class=nx>preIndex</span> <span class=o>&gt;=</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span><span class=p>]</span> <span class=o>&gt;</span> <span class=nx>current</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=nx>preIndex</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=nx>current</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-2>复杂度分析</h3><p>插入排序的时间复杂度最好的情况是已经是正序的序列，只需比较 <code>(n-1)</code> 次，时间复杂度为 <code>O(n)</code>，最坏的情况是倒序的序列，要比较 <code>n(n-1)/2</code> 次，时间复杂度为 <code>O(n^2)</code>，平均的话要比较时间复杂度为 <code>O(n^2)</code>。插入排序是一种稳定的排序方法，排序元素比较少的时候很好，大量元素便会效率低下。</p><h2 id=希尔排序-shell-sort>希尔排序 (Shell Sort)</h2><p>希尔排序也称递减增量排序算法，是插入排序的一种更高效的改进版本。但希尔排序是非稳定排序算法。</p><p>希尔排序是基于插入排序的以下两点性质而提出改进方法的：</p><ul><li>插入排序在对几乎已经排好序的数据操作时，效率高，即可以达到线性排序的效率；</li><li>但插入排序一般来说是低效的，因为插入排序每次只能将数据移动一位；</li></ul><p>希尔排序的基本思想是：先将整个待排序的记录序列分割成为若干子序列分别进行直接插入排序，待整个序列中的记录"基本有序"时，再对全体记录进行依次直接插入排序。</p><h3 id=算法描述-3>算法描述</h3><ul><li>选择一个增量序列 <code>t1, t2, …, tk</code>，其中 <code>ti > tj, tk = 1</code>；</li><li>按增量序列个数 <code>k</code>，对序列进行 <code>k</code> 趟排序；</li><li>每趟排序，根据对应的增量 <code>ti</code>，将待排序列分割成若干长度为 <code>m</code> 的子序列，分别对各子表进行直接插入排序。仅增量因子为 <code>1</code> 时，整个序列作为一个表来处理，表长度即为整个序列的长度。</li></ul><p>例如：</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/9d463a680fab1bbad68a9ffba2656556-4db386.webp alt=算法图解></p><h3 id=动图演示-3>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/f9616f6892819e579a2d4ab10256a732-6f5e4a.gif alt=希尔排序动图演示></p><h3 id=代码实现-3>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>shellSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>preIndex</span><span class=p>,</span> <span class=nx>current</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>gap</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>(</span><span class=nx>len</span> <span class=o>/</span> <span class=mi>2</span><span class=p>);</span> <span class=nx>gap</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>gap</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>(</span><span class=nx>gap</span> <span class=o>/</span> <span class=mi>2</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=nx>gap</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>len</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>preIndex</span> <span class=o>=</span> <span class=nx>i</span> <span class=o>-</span> <span class=nx>gap</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=nx>current</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=k>while</span> <span class=p>(</span><span class=nx>preIndex</span> <span class=o>&gt;=</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span><span class=p>]</span> <span class=o>&gt;</span> <span class=nx>current</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span> <span class=o>+</span> <span class=nx>gap</span><span class=p>]</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=nx>preIndex</span> <span class=o>-=</span> <span class=nx>gap</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=nx>arr</span><span class=p>[</span><span class=nx>preIndex</span> <span class=o>+</span> <span class=nx>gap</span><span class=p>]</span> <span class=o>=</span> <span class=nx>current</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-3>复杂度分析</h3><p>希尔排序的时间复杂度最好的情况是已经是正序的序列，只需比较 <code>(n-1)</code> 次，时间复杂度为 <code>O(n)</code>，最坏的情况是倒序的序列，时间复杂度为 <code>O(nlogn)</code>，平均时间复杂度为 <code>O(nlogn)</code>。</p><p>希尔排序是按照不同步长对元素进行插入排序，当刚开始元素很无序的时候，步长最大，所以插入排序的元素个数很少，速度很快；当元素基本有序了，步长很小，插入排序对于有序的序列效率很高。所以，希尔排序的时间复杂度会比 <code>O(n^2)</code> 好一些。</p><h2 id=归并排序-merge-sort>归并排序 (Merge Sort)</h2><p>归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。若将两个有序表合并成一个有序表，称为 <strong>2-路归并</strong>。</p><h3 id=算法描述-4>算法描述</h3><ul><li>把长度为 <code>n</code> 的输入序列分成两个长度为 <code>n/2</code> 的子序列；</li><li>对这两个子序列分别采用归并排序；</li><li>将两个排序好的子序列合并成一个最终的排序序列。</li></ul><h3 id=动图演示-4>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/cdda3f11c6efbc01577f5c29a9066772-f95f8b.gif alt=归并排序动图演示(自下而上)></p><h3 id=代码实现-4>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>mergeSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>len</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>middle</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>(</span><span class=nx>len</span> <span class=o>/</span> <span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>left</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=nx>middle</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>right</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=nx>middle</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>merge</span><span class=p>(</span><span class=nx>mergeSort</span><span class=p>(</span><span class=nx>left</span><span class=p>),</span> <span class=nx>mergeSort</span><span class=p>(</span><span class=nx>right</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>merge</span><span class=p>(</span><span class=nx>left</span><span class=p>,</span> <span class=nx>right</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>result</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=p>(</span><span class=nx>left</span><span class=p>.</span><span class=nx>length</span> <span class=o>&amp;&amp;</span> <span class=nx>right</span><span class=p>.</span><span class=nx>length</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>left</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=nx>right</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>result</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>left</span><span class=p>.</span><span class=nx>shift</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>result</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>right</span><span class=p>.</span><span class=nx>shift</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=p>(</span><span class=nx>left</span><span class=p>.</span><span class=nx>length</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>result</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>left</span><span class=p>.</span><span class=nx>shift</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=p>(</span><span class=nx>right</span><span class=p>.</span><span class=nx>length</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>result</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>right</span><span class=p>.</span><span class=nx>shift</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>result</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-4>复杂度分析</h3><p>归并排序是一种稳定的排序方法。和选择排序一样，归并排序的性能不受输入数据的影响，但表现比选择排序好的多，因为始终都是 <code>O(nlogn)</code> 的时间复杂度。代价是需要额外的内存空间。</p><h2 id=快速排序-quick-sort>快速排序 (Quick Sort)</h2><p>快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。</p><h3 id=算法描述-5>算法描述</h3><ul><li>从数列中挑出一个元素，称为 “基准” (pivot);</li><li>重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区操作；</li><li>递归地把小于基准值元素的子数列和大于基准值元素的子数列排序。</li></ul><h3 id=动图演示-5>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/d4e5d0a778dba725091d8317e6bac939-c25c18.gif alt=快速排序动图演示></p><h3 id=代码实现-5>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>quickSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>left</span><span class=p>,</span> <span class=nx>right</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>left</span> <span class=o>=</span> <span class=k>typeof</span> <span class=nx>left</span> <span class=o>==</span> <span class=s1>&#39;number&#39;</span> <span class=o>?</span> <span class=nx>left</span> <span class=o>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>right</span> <span class=o>=</span> <span class=k>typeof</span> <span class=nx>right</span> <span class=o>==</span> <span class=s1>&#39;number&#39;</span> <span class=o>?</span> <span class=nx>right</span> <span class=o>:</span> <span class=nx>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>left</span> <span class=o>&lt;</span> <span class=nx>right</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>pivot_pos</span> <span class=o>=</span> <span class=nx>partition</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>left</span><span class=p>,</span> <span class=nx>right</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>quickSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>left</span><span class=p>,</span> <span class=nx>pivot_pos</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>quickSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>pivot_pos</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=nx>right</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>partition</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>left</span><span class=p>,</span> <span class=nx>right</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>pivot</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>left</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=p>(</span><span class=nx>left</span> <span class=o>&lt;</span> <span class=nx>right</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(;</span> <span class=nx>left</span> <span class=o>&lt;</span> <span class=nx>right</span> <span class=o>&amp;&amp;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>right</span><span class=p>]</span> <span class=o>&gt;</span> <span class=nx>pivot</span><span class=p>;</span> <span class=o>--</span><span class=nx>right</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>    <span class=nx>arr</span><span class=p>[</span><span class=nx>left</span><span class=p>]</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>right</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(;</span> <span class=nx>left</span> <span class=o>&lt;</span> <span class=nx>right</span> <span class=o>&amp;&amp;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>left</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=nx>pivot</span><span class=p>;</span> <span class=o>++</span><span class=nx>left</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>    <span class=nx>arr</span><span class=p>[</span><span class=nx>right</span><span class=p>]</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>left</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>arr</span><span class=p>[</span><span class=nx>left</span><span class=p>]</span> <span class=o>=</span> <span class=nx>pivot</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>left</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-5>复杂度分析</h3><p>相比冒泡排序，每次交换是跳跃式的。每次排序的时候设置一个基准点，将小于等于基准点的数全部放到基准点的左边，将大于等于基准点的数全部放到基准点的右边。这样在每次交换的时候就不会像冒泡排序一样每次只能在相邻的数之间进行交换，交换的距离就大的多了。因此总的比较和交换次数就少了，速度自然就提高了。</p><p>当然在最坏的情况下，仍可能是相邻的两个数进行了交换。因此快速排序的最差时间复杂度和冒泡排序是一样的都是 <code>O(n^2)</code>，比如说顺序数列的快排。但它的平均时间复杂度是 <code>O(nlogn)</code>，且 <code>O(nlogn)</code> 记号中隐含的常数因子很小，比复杂度稳定等于 <code>O(nlogn)</code> 的归并排序要小很多。所以，对绝大多数顺序性较弱的随机数列而言，快速排序总是优于归并排序。</p><h2 id=堆排序-heap-sort>堆排序 (Heap Sort)</h2><p>堆排序是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似<strong>完全二叉树</strong>的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。每个结点的值都大于或等于其左右孩子结点的值，称为<strong>大顶堆</strong>；每个结点的值都小于或等于其左右孩子结点的值，称为<strong>小顶堆</strong>。</p><h3 id=算法描述-6>算法描述</h3><ul><li>将无序序列构建成一个堆，根据升序降序需求选择大顶堆或小顶堆；</li><li>将堆顶元素与末尾元素交换，将最大元素"沉"到数组末端；</li><li>重新调整结构，使其满足堆定义，然后继续交换堆顶元素与当前末尾元素，反复执行调整+交换步骤，直到整个序列有序。</li></ul><h3 id=动图演示-6>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/b7907d351809293c60658b0b87053c66-4cf79f.gif alt=堆排序动图演示></p><h3 id=代码实现-6>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>let</span> <span class=nx>len</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>heapify</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>left</span> <span class=o>=</span> <span class=mi>2</span> <span class=o>*</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>right</span> <span class=o>=</span> <span class=mi>2</span> <span class=o>*</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>largest</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>left</span> <span class=o>&lt;</span> <span class=nx>len</span> <span class=o>&amp;&amp;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>left</span><span class=p>]</span> <span class=o>&gt;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>largest</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>largest</span> <span class=o>=</span> <span class=nx>left</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>right</span> <span class=o>&lt;</span> <span class=nx>len</span> <span class=o>&amp;&amp;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>right</span><span class=p>]</span> <span class=o>&gt;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>largest</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>largest</span> <span class=o>=</span> <span class=nx>right</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>largest</span> <span class=o>!==</span> <span class=nx>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>largest</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]]</span> <span class=o>=</span> <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>largest</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>    <span class=nx>heapify</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>largest</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>heapSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>(</span><span class=nx>len</span> <span class=o>/</span> <span class=mi>2</span><span class=p>);</span> <span class=nx>i</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span><span class=o>--</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>heapify</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=nx>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span><span class=o>--</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]]</span> <span class=o>=</span> <span class=p>[</span><span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>],</span> <span class=nx>arr</span><span class=p>[</span><span class=mi>0</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>    <span class=nx>len</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>heapify</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-6>复杂度分析</h3><p>构建初始堆经推导复杂度为 <code>O(n)</code>，在交换并重建堆的过程中，需交换 <code>n-1</code> 次，而重建堆的过程中，根据完全二叉树的性质，<code>[log(n-1), log(n-2), ..., 1]</code> 逐步递减，近似为 <code>nlogn</code>。所以堆排序时间复杂度一般认为就是 <code>O(nlogn)</code> 级。</p><h2 id=计数排序-counting-sort>计数排序 (Counting Sort)</h2><p>计数排序的核心在于将输入的数据值转化为键存储在额外开辟的数组空间中。作为一种线性时间复杂度的排序，计数排序要求输入的数据必须是有确定范围的整数。</p><h3 id=算法描述-7>算法描述</h3><ol><li>统计数组中每个值为 <code>i</code> 的元素出现的次数，存入数组 <code>bucket</code> 的第 <code>i</code> 项；</li><li>对所有的计数累加；</li><li>反向填充目标数组。</li></ol><h3 id=动图演示-7>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/827d96b8ca3682e8775f4916f22b45ac-27b287.gif alt=计数排序动图演示></p><h3 id=代码实现-7>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>countSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>bucket</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>num</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=nx>bucket</span><span class=p>[</span><span class=nx>num</span><span class=p>]</span> <span class=o>&gt;=</span> <span class=mi>1</span> <span class=o>?</span> <span class=nx>bucket</span><span class=p>[</span><span class=nx>num</span><span class=p>]</span><span class=o>++</span> <span class=o>:</span> <span class=p>(</span><span class=nx>bucket</span><span class=p>[</span><span class=nx>num</span><span class=p>]</span> <span class=o>=</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>index</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>bucket</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=p>(</span><span class=nx>bucket</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>arr</span><span class=p>[</span><span class=nx>index</span><span class=o>++</span><span class=p>]</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=nx>bucket</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-7>复杂度分析</h3><p>计数排序是一个稳定的排序算法。当输入的元素是 <code>n</code> 个 <code>0~k</code> 之间的整数时，时间复杂度是 <code>O(n+k)</code>，空间复杂度也是 <code>O(n+k)</code>，其排序速度快于任何比较排序算法。当 <code>k</code> 不是很大并且序列比较集中时，计数排序是一个很有效的排序算法。</p><h2 id=桶排序-bucket-sort>桶排序 (Bucket Sort)</h2><p>桶排序是计数排序的升级版。它利用了函数的映射关系，高效与否的关键就在于这个映射函数的确定。桶排序的工作的原理：假设输入数据服从均匀分布，将数据分到有限数量的桶里，每个桶再分别排序。</p><p>为了使桶排序更加高效，我们需要做到这两点：</p><ul><li>在额外空间充足的情况下，尽量增大桶的数量；</li><li>使用的映射函数能够将输入的 N 个数据均匀的分配到 K 个桶中。</li></ul><p>同时，对于桶中元素的排序，选择何种比较排序算法对于性能的影响至关重要。</p><h3 id=算法描述-8>算法描述</h3><ol><li>设置一个定量的数组当作空桶子。</li><li>寻访序列，并且把项目一个一个放到对应的桶子去。</li><li>对每个不是空的桶子进行排序。</li><li>从不是空的桶子里把项目再放回原来的序列中。</li></ol><h3 id=示意图>示意图</h3><p>元素分布在桶中：</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/db29e7423ceb2744e560cd81b56b81be-880431.png alt></p><p>然后，元素在每个桶中排序：</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/6b4c5e9445b9741af718e69de82ce0fe-f55a88.png alt></p><h3 id=代码实现-8>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>bucketSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>num</span> <span class=o>=</span> <span class=mi>10</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>function</span> <span class=nx>swap</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>i</span><span class=p>,</span> <span class=nx>j</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>temp</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=o>=</span> <span class=nx>temp</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>len</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>max</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>max</span><span class=p>(...</span><span class=nx>arr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>min</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>min</span><span class=p>(...</span><span class=nx>arr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>buckets</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>bucketsSize</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>((</span><span class=nx>max</span> <span class=o>-</span> <span class=nx>min</span><span class=p>)</span> <span class=o>/</span> <span class=nx>num</span><span class=p>)</span> <span class=o>+</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>len</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>index</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>((</span><span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>-</span> <span class=nx>min</span><span class=p>)</span> <span class=o>/</span> <span class=nx>bucketsSize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>]</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>].</span><span class=nx>push</span><span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>l</span> <span class=o>=</span> <span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>].</span><span class=nx>length</span><span class=p>;</span> <span class=nx>l</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>l</span><span class=o>--</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>][</span><span class=nx>l</span><span class=p>]</span> <span class=o>&lt;</span> <span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>][</span><span class=nx>l</span> <span class=o>-</span> <span class=mi>1</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>swap</span><span class=p>(</span><span class=nx>buckets</span><span class=p>[</span><span class=nx>index</span><span class=p>],</span> <span class=nx>l</span><span class=p>,</span> <span class=nx>l</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>wrapBuckets</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>buckets</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>buckets</span><span class=p>[</span><span class=nx>i</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>wrapBuckets</span> <span class=o>=</span> <span class=nx>wrapBuckets</span><span class=p>.</span><span class=nx>concat</span><span class=p>(</span><span class=nx>buckets</span><span class=p>[</span><span class=nx>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>wrapBuckets</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-8>复杂度分析</h3><p>桶排序最好情况下使用线性时间 <code>O(n)</code>，桶排序的时间复杂度，取决与对各个桶之间数据进行排序的时间复杂度，因为其它部分的时间复杂度都为 <code>O(n)</code>。很显然，桶划分的越小，各个桶之间的数据越少，排序所用的时间也会越少。但相应的空间消耗就会增大。</p><h2 id=基数排序-radix-sort>基数排序 (Radix Sort)</h2><p>基数排序是按照低位先排序，然后收集；再按照高位排序，然后再收集；依次类推，直到最高位。有时候有些属性是有优先级顺序的，先按低优先级排序，再按高优先级排序。最后的次序就是高优先级高的在前，高优先级相同的低优先级高的在前。</p><h3 id=算法描述-9>算法描述</h3><ul><li>取得数组中的最大数，并取得位数；</li><li>arr 为原始数组，从最低位开始取每个位组成 radix 数组；</li><li>对 radix 进行计数排序（利用计数排序适用于小范围数的特点）。</li></ul><h3 id=动图演示-8>动图演示</h3><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/3a6f1e5059386523ed941f0d6c3a136e-1f2f0f.gif alt=基数排序动图演示></p><h3 id=代码实现-9>代码实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>radixSort</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>max</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>max</span><span class=p>(...</span><span class=nx>arr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>counter</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span> <span class=nx>mod</span> <span class=o>=</span> <span class=mi>10</span><span class=p>,</span> <span class=nx>dev</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>max</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>,</span> <span class=nx>dev</span> <span class=o>*=</span> <span class=mi>10</span><span class=p>,</span> <span class=nx>mod</span> <span class=o>*=</span> <span class=mi>10</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>bucket</span> <span class=o>=</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>((</span><span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=o>%</span> <span class=nx>mod</span><span class=p>)</span> <span class=o>/</span> <span class=nx>dev</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>counter</span><span class=p>[</span><span class=nx>bucket</span><span class=p>]</span> <span class=o>==</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>counter</span><span class=p>[</span><span class=nx>bucket</span><span class=p>]</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=nx>counter</span><span class=p>[</span><span class=nx>bucket</span><span class=p>].</span><span class=nx>push</span><span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=nx>j</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nx>pos</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;</span> <span class=nx>counter</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>value</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>counter</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>while</span> <span class=p>((</span><span class=nx>value</span> <span class=o>=</span> <span class=nx>counter</span><span class=p>[</span><span class=nx>j</span><span class=p>].</span><span class=nx>shift</span><span class=p>())</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=nx>arr</span><span class=p>[</span><span class=nx>pos</span><span class=o>++</span><span class=p>]</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=复杂度分析-9>复杂度分析</h3><p>基数排序基于分别排序，分别收集，所以是稳定的。但基数排序的性能比桶排序要略差，每一次关键字的桶分配都需要 <code>O(n)</code> 的时间复杂度，而且分配之后得到新的关键字序列又需要 <code>O(n)</code> 的时间复杂度。假如待排数据可以分为 <code>d</code> 个关键字，则基数排序的时间复杂度将是 <code>O(d*2n)</code> ，当然 <code>d</code> 要远远小于 <code>n</code>，因此基本上还是线性级别的。</p><p>基数排序的空间复杂度为 <code>O(n+k)</code>，其中 <code>k</code> 为桶的数量。一般来说 <code>n>>k</code>，因此额外空间需要大概 <code>n</code> 个左右。</p><h2 id=参考>参考</h2><ul><li><p><a href=https://github.com/hustcc/JS-Sorting-Algorithm>十大经典排序算法</a></p></li><li><p><a href=https://www.cnblogs.com/onepixel/p/7674659.html>十大经典排序算法（动图演示）</a></p></li><li><p><a href=https://www.jianshu.com/p/d730ae586cf3>排序：希尔排序（算法）</a></p></li><li><p><a href=https://wiki.jikexueyuan.com/project/easy-learn-algorithm/fast-sort.html>算法 3：最常用的排序——快速排序</a></p></li><li><p><a href=https://www.cnblogs.com/chengxiao/p/6129630.html>图解排序算法(三)之堆排序</a></p></li></ul></div><div class="article-licensing box"><div class=licensing-title><p>常见的十个排序算法</p><p><a href=https://blog.imaple.net/posts/algorithm_sort/>https://blog.imaple.net/posts/algorithm_sort/</a></p></div><div class="licensing-meta level is-mobile"><div class=level-left><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-04-18</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2020-05-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a title="CC BY-NC 4.0" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank rel=noopener>CC BY-NC 4.0</a></p></div></div></div></div></div><div class="article-tags size-small mb-4"><span class=mr-2>#</span><a class="link-muted mr-2" href=/tags/algorithm rel=tag>algorithm</a></div></article></div><nav class="post-navigation mt-4 level is-mobile"><div class=level-start><a class="article-nav-prev level level-item link-muted" href=https://blog.imaple.net/posts/fix_githubusercontent/><i class="level-item fas fa-chevron-left"></i>
+<span class=level-item>解决 raw.githubusercontent.com 无法访问</span></a></div><div class=level-end><a class="article-nav-next level level-item link-muted" href=https://blog.imaple.net/posts/deploy_teamspeak3/><span class=level-item>搭建 Teamspeak3 服务器</span>
+<i class="level-item fas fa-chevron-right"></i></a></div></nav><div class=card><div class=card-content><h3 class="title is-5">评论</h3><div id=comment-container></div><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.6.2/gitalk.min.css><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.6.2/gitalk.min.js></script><script>const gitalk=new Gitalk({id:"b4217bde8622861fcb8f69950f90b8b3",repo:"imaple.github.io",owner:"iMaple",clientID:"376411df254e5e681ea6",clientSecret:"69fd9b70865e7a062eb1ce4da8a2fb509023df89",admin:["iMaple"],createIssueManually:!1,distractionFreeMode:!1,perPage:10,pagerDirection:"last",enableHotKey:!0});gitalk.render("comment-container")</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen order-1"><div class="card widget" data-type=profile><div class=card-content><nav class=level><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src=/img/avatar.webp alt=iMaple></figure><p class="title is-size-4 is-block" style=line-height:inherit>iMaple</p><p class="is-size-6 is-block">说有意义的话，做有意义的事</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i>
+<span>地球, 太阳系</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class=heading>文章</p><a href=/archives><p class=title>11</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class=heading>分类</p><a href=/categories><p class=title>6</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class=heading>标签</p><a href=/tags><p class=title>12</p></a></div></div></nav><div class=level><a class="level-item button is-primary is-rounded" href=https://github.com/imaple target=_blank rel=noopener>关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" title=Gitlab href=https://gitlab.com/imaple target=_blank rel=noopener><i class="fab fa-gitlab"></i>
+</a><a class="level-item button is-transparent is-marginless" title=Telegram href=https://telegram.me/imaple target=_blank rel=noopener><i class="fab fa-telegram"></i>
+</a><a class="level-item button is-transparent is-marginless" title=Mail href=mailto:imaple.org@gmail.com target=_blank rel=noopener><i class="fas fa-envelope"></i>
+</a><a class="level-item button is-transparent is-marginless" title=RSS href=/index.xml target=_blank rel=noopener><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" id=toc data-type=toc><div class=card-content><div class=menu><h3 class=menu-label>目录</h3><nav id=TableOfContents><ul><li><a href=#冒泡排序-bubble-sort>冒泡排序 (Bubble Sort)</a><ul><li><a href=#算法描述>算法描述</a></li><li><a href=#动图演示>动图演示</a></li><li><a href=#代码实现>代码实现</a></li><li><a href=#复杂度分析>复杂度分析</a></li></ul></li><li><a href=#选择排序-selection-sort>选择排序 (Selection-sort)</a><ul><li><a href=#算法描述-1>算法描述</a></li><li><a href=#动图演示-1>动图演示</a></li><li><a href=#代码实现-1>代码实现</a></li><li><a href=#复杂度分析-1>复杂度分析</a></li></ul></li><li><a href=#插入排序-insertion-sort>插入排序 (Insertion Sort)</a><ul><li><a href=#算法描述-2>算法描述</a></li><li><a href=#动图演示-2>动图演示</a></li><li><a href=#代码实现-2>代码实现</a></li><li><a href=#复杂度分析-2>复杂度分析</a></li></ul></li><li><a href=#希尔排序-shell-sort>希尔排序 (Shell Sort)</a><ul><li><a href=#算法描述-3>算法描述</a></li><li><a href=#动图演示-3>动图演示</a></li><li><a href=#代码实现-3>代码实现</a></li><li><a href=#复杂度分析-3>复杂度分析</a></li></ul></li><li><a href=#归并排序-merge-sort>归并排序 (Merge Sort)</a><ul><li><a href=#算法描述-4>算法描述</a></li><li><a href=#动图演示-4>动图演示</a></li><li><a href=#代码实现-4>代码实现</a></li><li><a href=#复杂度分析-4>复杂度分析</a></li></ul></li><li><a href=#快速排序-quick-sort>快速排序 (Quick Sort)</a><ul><li><a href=#算法描述-5>算法描述</a></li><li><a href=#动图演示-5>动图演示</a></li><li><a href=#代码实现-5>代码实现</a></li><li><a href=#复杂度分析-5>复杂度分析</a></li></ul></li><li><a href=#堆排序-heap-sort>堆排序 (Heap Sort)</a><ul><li><a href=#算法描述-6>算法描述</a></li><li><a href=#动图演示-6>动图演示</a></li><li><a href=#代码实现-6>代码实现</a></li><li><a href=#复杂度分析-6>复杂度分析</a></li></ul></li><li><a href=#计数排序-counting-sort>计数排序 (Counting Sort)</a><ul><li><a href=#算法描述-7>算法描述</a></li><li><a href=#动图演示-7>动图演示</a></li><li><a href=#代码实现-7>代码实现</a></li><li><a href=#复杂度分析-7>复杂度分析</a></li></ul></li><li><a href=#桶排序-bucket-sort>桶排序 (Bucket Sort)</a><ul><li><a href=#算法描述-8>算法描述</a></li><li><a href=#示意图>示意图</a></li><li><a href=#代码实现-8>代码实现</a></li><li><a href=#复杂度分析-8>复杂度分析</a></li></ul></li><li><a href=#基数排序-radix-sort>基数排序 (Radix Sort)</a><ul><li><a href=#算法描述-9>算法描述</a></li><li><a href=#动图演示-8>动图演示</a></li><li><a href=#代码实现-9>代码实现</a></li><li><a href=#复杂度分析-9>复杂度分析</a></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><style>.menu-list>li>a.is-active+.menu-list{display:block}.menu-list>li>a+.menu-list{display:none}</style><script type=text/javascript src=/js/toc.js defer></script></div><div class="card widget" data-type=categories><div class=card-content><div class=menu><h3 class=menu-label>分类</h3><ul class=menu-list><li><a class="level is-mobile" href=/categories/%e5%a4%87%e5%bf%98><span class=level-start><span class=level-item>备忘</span>
+</span><span class=level-end><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href=/categories/%e6%8a%80%e6%9c%af><span class=level-start><span class=level-item>技术</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e6%97%a5%e5%b8%b8><span class=level-start><span class=level-item>日常</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e6%b8%b8%e6%88%8f><span class=level-start><span class=level-item>游戏</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e7%ae%97%e6%b3%95><span class=level-start><span class=level-item>算法</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e9%83%a8%e7%bd%b2><span class=level-start><span class=level-item>部署</span>
+</span><span class=level-end><span class="level-item tag">4</span></span></a></li></ul></div></div></div><div class="card widget" data-type=tags><div class=card-content><div class=menu><h3 class=menu-label>标签</h3><div class="field is-grouped is-grouped-multiline"><div class=control><a class="tags has-addons" href=/tags/algorithm><span class=tag>algorithm</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/certificate><span class=tag>certificate</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/don%27t%20ask><span class=tag>don't ask</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/git><span class=tag>git</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/hugo><span class=tag>hugo</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/mail><span class=tag>mail</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/minecraft><span class=tag>minecraft</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/nginx><span class=tag>nginx</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/sqlite><span class=tag>sqlite</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/teamspeak3><span class=tag>teamspeak3</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/tls><span class=tag>tls</span>
+<span class=tag>3</span></a></div><div class=control><a class="tags has-addons" href=/tags/workflow><span class=tag>workflow</span>
+<span class=tag>2</span></a></div></div></div></div></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type=recent-posts><div class=card-content><h3 class=menu-label>最新文章</h3><article class=media><figure class=media-left><a class=image href=https://blog.imaple.net/posts/auto_hugo/><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/06d0c0fa95f0fa681f61aa1ba0c97ec7-53324e.webp alt="利用 GitHub Action 自动部署博客"></a></figure><div class=media-content><p class=date><time datetime=2020-09-11T10:19:18+08:00>2020-09-11</time></p><p class=title><a href=https://blog.imaple.net/posts/auto_hugo/>利用 GitHub Action 自动部署博客</a></p><p class=categories><a href=/categories/%e9%83%a8%e7%bd%b2>部署</a></p></div></article><article class=media><div class=media-content><p class=date><time datetime=2020-08-26T18:37:45+08:00>2020-08-26</time></p><p class=title><a href=https://blog.imaple.net/posts/deploy_kms/>关于 Kms 服务器</a></p><p class=categories><a href=/categories/%e5%a4%87%e5%bf%98>备忘</a></p></div></article><article class=media><figure class=media-left><a class=image href=https://blog.imaple.net/posts/auto_acme/><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/19f0a24b34107b97c23f99149f476410-3512c8.webp alt="利用 GitHub Action 自动续签 SSL 证书"></a></figure><div class=media-content><p class=date><time datetime=2020-06-06T16:40:16+08:00>2020-06-06</time></p><p class=title><a href=https://blog.imaple.net/posts/auto_acme/>利用 GitHub Action 自动续签 SSL 证书</a></p><p class=categories><a href=/categories/%e9%83%a8%e7%bd%b2>部署</a></p></div></article><article class=media><div class=media-content><p class=date><time datetime=2020-05-14T20:58:46+08:00>2020-05-14</time></p><p class=title><a href=https://blog.imaple.net/posts/fix_githubusercontent/>解决 raw.githubusercontent.com 无法访问</a></p><p class=categories><a href=/categories/%e5%a4%87%e5%bf%98>备忘</a></p></div></article><article class=media><figure class=media-left><a class=image href=https://blog.imaple.net/posts/algorithm_sort/><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/8d652081532be39da5ad48fabc49b5e8-978a91.webp alt=常见的十个排序算法></a></figure><div class=media-content><p class=date><time datetime=2020-04-18T18:42:15+08:00>2020-04-18</time></p><p class=title><a href=https://blog.imaple.net/posts/algorithm_sort/>常见的十个排序算法</a></p><p class=categories><a href=/categories/%e7%ae%97%e6%b3%95>算法</a></p></div></article></div></div><div class="card widget" data-type=archives><div class=card-content><div class=menu><h3 class=menu-label>归档</h3><ul class=menu-list><li><a class="level is-mobile" href=/archives/#2020-09><span class=level-start><span class=level-item>2020年 9月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-08><span class=level-start><span class=level-item>2020年 8月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-06><span class=level-start><span class=level-item>2020年 6月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-05><span class=level-start><span class=level-item>2020年 5月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-04><span class=level-start><span class=level-item>2020年 4月</span>
+</span><span class=level-end><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-02><span class=level-start><span class=level-item>2020年 2月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-01><span class=level-start><span class=level-item>2020年 1月</span>
+</span><span class=level-end><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href=/archives/#2019-12><span class=level-start><span class=level-item>2019年 12月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type=links><div class=card-content><div class=menu><h3 class=menu-label>链接</h3><ul class=menu-list><li><a class="level is-mobile" href=https://gohugo.io target=_blank rel=noopener><span class=level-left><span class=level-item>Hugo</span></span>
+<span class=level-right><span class="level-item tag">gohugo.io</span></span></a></li><li><a class="level is-mobile" href=https://github.com/iMaple/hugo-theme-icarus target=_blank rel=noopener><span class=level-left><span class=level-item>icarus</span></span>
+<span class=level-right><span class="level-item tag">github.com</span></span></a></li></ul></div></div></div><div class="card widget" data-type=subscribe-email><div class=card-content><div class=menu><h3 class=menu-label>订阅更新</h3><form action=https://feedburner.google.com/fb/a/mailverify method=post target=popupwindow onsubmit='return window.open("https://feedburner.google.com/fb/a/mailverify?uri=imaple","popupwindow","scrollbars=yes,width=550,height=520"),!0'><input type=hidden value=imaple name=uri>
+<input type=hidden name=loc value=en_US><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class=input name=email type=email placeholder=Email>
+<span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class=control><input class=button type=submit value=订阅></div></div><p class=help>Powered by Google feedburner</p></form></div></div></div></div></div></div></section><footer class=footer><div class=container><div class=level><div class=level-start><a class="footer-logo is-block mb-2" href=/><img src=/img/logo.svg alt="404 Page not found" height=28></a><p class=is-size-7><span>&copy; 2020 - 2024 </span>&nbsp;&nbsp;Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>&nbsp;&&nbsp;<a href=https://github.com/iMaple/hugo-theme-icarus/ target=_blank rel=noopener>Icarus</a><br><span id=busuanzi_container_site_uv>共
+<span id=busuanzi_value_site_uv>0</span>
+个访客</span></p></div><div class=level-end><div class="field has-addons"><p class=control><a class="button is-transparent is-large" title="Creative Commons" href=https://creativecommons.org/ target=_blank rel=noopener><i class="fab fa-creative-commons"></i></a></p></div></div></div></div></footer><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.5.1/jquery.min.js></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/moment.js/2.26.0/moment-with-locales.min.js></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/clipboard.js/2.0.4/clipboard.min.js defer></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/9.18.1/highlight.min.js></script><script>moment.locale("zh-cn")</script><script>var IcarusThemeSettings={article:{highlight:{clipboard:!0,fold:"folded"}},toc:{index:!0}}</script><script type=text/javascript src=/js/column.js></script><script type=text/javascript src=/js/animation.js></script><a id=back-to-top title=回到顶端 href=javascript:;><i class="fas fa-chevron-up"></i>
+</a><script type=text/javascript src=/js/back2top.js defer></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/cookieconsent/3.1.1/cookieconsent.min.js defer></script><script>window.addEventListener("load",()=>{window.cookieconsent.initialise({type:"info",theme:"edgeless",static:!1,position:"bottom-left",content:{message:"此网站使用Cookie来改善您的体验。",dismiss:"知道了！",allow:"允许使用Cookie",deny:"拒绝",link:"了解更多",policy:"Cookie政策",href:"https://www.cookiesandyou.com/"},palette:{popup:{background:"#edeff5",text:"#838391"},button:{background:"#4b81e8"}}})})</script><script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+      'HTML-CSS': {matchFontHeight: false},
+      SVG: {matchFontHeight: false},
+      CommonHTML: {matchFontHeight: false},
+      tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+    </script><script type=text/javascript src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><script src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/smoothscroll/1.4.10/SmoothScroll.min.js async></script><script type=text/javascript src=/js/main.js defer></script><div class=searchbox><div class=searchbox-container><div class=searchbox-header><div class=searchbox-input-container><input class=searchbox-input type=text placeholder=想要查找什么...></div><a class=searchbox-close href=javascript:;>×</a></div><div class=searchbox-body></div></div></div><script type=text/javascript src=/js/insight.js defer></script><script>document.addEventListener("DOMContentLoaded",function(){loadInsight({contentUrl:"/index.json"},{hint:"想要查找什么...",untitled:"(无标题)",posts:"文章",pages:"页面",categories:"分类",tags:"标签"})})</script></body></html>

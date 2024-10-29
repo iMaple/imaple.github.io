@@ -1,0 +1,208 @@
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=format-detection content="telephone=no, date=no, address=no, email=no"><meta http-equiv=X-UA-Compatible content="IE=edge, chrome=1"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><meta name=generator content="Hugo 0.136.5 with theme icarus"><meta name=google-site-verification content="Xu4Z5XZHTM0KZM9KXO7c23fo02SKezOMlFfUjuBoi5U"><meta name=baidu-site-verification content="hdV6VMPvvZ"><meta name=author content><meta name=description content="利用 Github Action 来对免费的 Let&rsquo;s Encrypt 证书进行自动续签。
+注：签发工具使用 acme.sh，签发模式为 DNS API；域名的 DNS provider 为 Cloudflare。
+"><meta name=keywords content><title>利用 GitHub Action 自动续签 SSL 证书 - 枫林's Blog</title>
+<meta name=application-name content="枫林's Blog"><meta name=msapplication-TileImage content="img/favicon.svg"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="枫林's Blog"><meta name=apple-mobile-web-app-status-bar-style content="default"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.imaple.net\/posts\/auto_acme\/"},"headline":"枫林\u0027s Blog","image":[],"dataPublished":"2020-06-06T16:40:16\u002b08:00","dataModified":"2020-07-28T22:16:20\u002b08:00","author":{"@type":"Person","name":""},"publisher":{"@type":"Organization","name":"","logo":{"@type":"ImageObject","url":"publisher_logo"}},"description":"\u003cp\u003e利用 Github Action 来对免费的 Let\u0026rsquo;s Encrypt 证书进行自动续签。\u003c\/p\u003e\n\u003cp\u003e注：签发工具使用 acme.sh，签发模式为 DNS API；域名的 DNS provider 为 Cloudflare。\u003c\/p\u003e"}</script><link rel=canonical href=https://blog.imaple.net/posts/auto_acme/><link rel=alternate href=https://blog.imaple.net/index.xml title="枫林's Blog" type=application/rss+xml><link rel=icon href=/img/favicon.svg><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/5.15.2/css/all.min.css><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/9.18.1/styles/atom-one-light.min.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel=stylesheet href=/css/default.css><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><script type=text/javascript src=https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js defer></script><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/cookieconsent/3.1.1/cookieconsent.min.css><script src="https://www.googletagmanager.com/gtag/js?id=G-6DQ842ZL2N" async></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-6DQ842ZL2N")</script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/pace/1.0.2/pace.min.js></script></head><body class=is-3-column><nav class="navbar navbar-main"><div class=container><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href=/><img src=/img/logo.svg alt="利用 GitHub Action 自动续签 SSL 证书" height=28></a></div><div class=navbar-menu><div class=navbar-start><a class=navbar-item href=/>主页</a>
+<a class=navbar-item href=/archives>归档</a>
+<a class=navbar-item href=/categories>分类</a>
+<a class=navbar-item href=/tags>标签</a>
+<a class=navbar-item href=/about>关于</a></div><div class=navbar-end><a class="navbar-item search" title=搜索 href=javascript:;><i class="fas fa-search"></i></a></div></div></div></nav><section class=section><div class=container><div class=columns><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class=card><div class=card-image><span class="image is-7by3"><img class=fill src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/7c74d3fc9385f0609c7f1ac152b81707-909d0e.webp alt="利用 GitHub Action 自动续签 SSL 证书"></span></div><article class="card-content article" role=article><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class=level-left><span class=level-item><time datetime=2020-06-06T16:40:16+08:00 title=2020-06-06T16:40:16+08:00>2020-06-06
+</time>发表
+</span><span class=level-item><time datetime=2020-07-28T22:16:20+08:00 title=2020-07-28T22:16:20+08:00>2020-07-28
+</time>更新
+</span><span class=level-item><a class=link-muted href=/categories/%e9%83%a8%e7%bd%b2>部署</a>
+</span><span class=level-item>2 分钟读完 (大约976个字)</span>
+<span class=level-item id=busuanzi_container_page_pv><span id=busuanzi_value_page_pv>0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">利用 GitHub Action 自动续签 SSL 证书</h1><div class=content><p>利用 Github Action 来对免费的 Let&rsquo;s Encrypt 证书进行自动续签。</p><p>注：签发工具使用 acme.sh，签发模式为 DNS API；域名的 DNS provider 为 Cloudflare。</p><p>新建仓库 auto-acme。（仓库名称随意，最好是私人仓库。）</p><p>顺便一提：</p><blockquote><p>2020年10月1日起， 新创建的存储库将默认为 <code>main</code>。<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup></p></blockquote><p>添加 action 脚本中所需要的 Secrets 信息。</p><p>包括 DNS API 所需要的<a href=https://github.com/acmesh-official/acme.sh/wiki/dnsapi>验证信息</a>，以及如果需要发送附件邮件的话，还需要一套拥有 smtp 功能的电子邮箱和密码。</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/d55d5338610b0cbfebad040ae9e65001-fec5bd.webp alt="第一次添加 Secrets"></p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/7dcfcb4b0051841ee08f86e73121ab8b-004e2b.webp alt="添加所需要的 Secrets"></p><p>创建 Github Action。</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/64986c41923538ff5db2c5ff64bd7b27-8d5f25.webp alt="第一次创建 Github Action"></p><p>然后将下面的配置文件复制到网页上的编辑器内。</p><p>配置文件内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>schedule</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>cron</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;0 2 1 * *&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>branches</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>jobs</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>build</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-latest</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Install acme.sh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>        curl https://get.acme.sh | sh</span><span class=w>        
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Issue Certificates</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>env</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ACME</span><span class=p>:</span><span class=w> </span><span class=l>/home/runner/.acme.sh/acme.sh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>CF_Account_ID</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.CF_ACCOUNT_ID }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>CF_Token</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.CF_TOKEN }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>        mkdir -p ./ssl/example.com
+</span></span></span><span class=line><span class=cl><span class=sd>        $ACME --issue --dns dns_cf -d example.com -d &#39;*.example.com&#39; -k ec-256
+</span></span></span><span class=line><span class=cl><span class=sd>        $ACME --installcert --ecc -d example.com -d &#39;*.example.com&#39; --ca-file ./ssl/example.com/chain.pem --cert-file ./ssl/example.com/cert.pem --key-file ./ssl/example.com/key.pem --fullchain-file ./ssl/example.com/fullchain.pem
+</span></span></span><span class=line><span class=cl><span class=sd>        zip -r ssl.zip ssl</span><span class=w>        
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Get current date</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>date</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>echo &#34;::set-output name=date::$(date +&#39;%Y-%m-%d&#39;)&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Create Release</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>create_release</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/create-release@v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>env</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>GITHUB_TOKEN</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.GITHUB_TOKEN }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>tag_name</span><span class=p>:</span><span class=w> </span><span class=l>v${{ steps.date.outputs.date }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>release_name</span><span class=p>:</span><span class=w> </span><span class=l>${{ steps.date.outputs.date }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>body</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>          Renew certificate files at ${{ steps.date.outputs.date }}</span><span class=w>          
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>draft</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>prerelease</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Upload Release Asset</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>upload_release_asset</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/upload-release-asset@v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>env</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>GITHUB_TOKEN</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.GITHUB_TOKEN }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>upload_url</span><span class=p>:</span><span class=w> </span><span class=l>${{ steps.create_release.outputs.upload_url }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>asset_path</span><span class=p>:</span><span class=w> </span><span class=l>./ssl.zip</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>asset_name</span><span class=p>:</span><span class=w> </span><span class=l>ssl.zip</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>asset_content_type</span><span class=p>:</span><span class=w> </span><span class=l>application/zip</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Send Email</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>dawidd6/action-send-mail@v2.2.0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>server_address</span><span class=p>:</span><span class=w> </span><span class=l>smtp.exmail.qq.com</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>server_port</span><span class=p>:</span><span class=w> </span><span class=m>465</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>username</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.MAIL_USERNAME }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>password</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.MAIL_PASSWORD }}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>subject</span><span class=p>:</span><span class=w> </span><span class=l>Auto ACME</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>body</span><span class=p>:</span><span class=w> </span><span class=l>Renew certificate files is complete! Download on ${{ steps.upload_release_asset.outputs.browser_download_url }}.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>to</span><span class=p>:</span><span class=w> </span><span class=l>admin@example.com</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>from</span><span class=p>:</span><span class=w> </span><span class=l>GitHub Workflow</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>attachments</span><span class=p>:</span><span class=w> </span><span class=l>./ssl.zip</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>简单说下配置内容，有关 Github Action 详细信息，可查阅<a href=https://docs.github.com/cn/free-pro-team@latest/actions/quickstart>官方文档</a>。首先：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>on</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>schedule</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>cron</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;0 2 1 * *&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>branches</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>main</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>此部分配置该 Action 什么时候运行。这里配置了两个触发器，包括一个 schedule，意为在每月 1 号的 UTC 时间 02:00 运行 Action；还有一个 push，意为当对 <code>main</code> 分支执行 push 操作时运行 Action。然后：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>jobs</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>build</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-latest</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=c># other...</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>此部分说明该 workflow 包含了一个 叫做 build 的 job，该 job 将在 ubuntu 的最新发型版上工作，并包含了如下的步骤：</p><ol><li>安装 acme.sh。</li><li>使用 acme.sh 签发证书。此部分将 Secrets 中的 <code>CF_ACCOUNT_ID</code> 与 <code>CF_TOKEN</code> 加载到环境变量中，供 acme.sh 使用。（ps. 这里签发的是 ECC 证书）</li><li>获取现在的日期，给后面 Release body 用。</li><li>创建一个 Release。</li><li>给上面创建的 Release 上传文件，也就是打包好的证书文件。</li><li>给指定邮箱发送一封包含附件的电子邮件。（不需要的话，这部分可以直接删掉）</li></ol><p>接着，填写 Action 文件的文件名，点击 Start commit，输入 commit message 与 user email （可选），点击 Commit new file。</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/e2ebc9027da974b022f3b2a3c758b60c-a47355.webp alt=最后的操作></p><p>不出意外的话，应该会看到类似的界面：</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/986226f5af641f0b69a094a4d3b9ed10-d338ab.webp alt></p><p>当 workflow 执行成功时（绿色对勾），到项目的 Release 页应该会看到</p><p><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/42e8a1bbdc9b6a916ae808aabbf1c069-cb8a11.webp alt></p><p>以上。</p><p>ps. 私有仓库的 Github Action 每月有 2000 分钟免费计划，<a href=https://github.com/settings/billing>点击查看你的剩余额度</a>。鉴于每月只构建一次，每次也就使用 1~2 分钟，所以完全够用。</p><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p><a href=https://github.com/github/renaming>Renaming the default branch from master</a>&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></div><div class="article-licensing box"><div class=licensing-title><p>利用 GitHub Action 自动续签 SSL 证书</p><p><a href=https://blog.imaple.net/posts/auto_acme/>https://blog.imaple.net/posts/auto_acme/</a></p></div><div class="licensing-meta level is-mobile"><div class=level-left><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-06-06</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2020-07-28</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a title="CC BY-NC 4.0" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank rel=noopener>CC BY-NC 4.0</a></p></div></div></div></div></div><div class="article-tags size-small mb-4"><span class=mr-2>#</span><a class="link-muted mr-2" href=/tags/certificate rel=tag>certificate</a><a class="link-muted mr-2" href=/tags/TLS rel=tag>TLS</a><a class="link-muted mr-2" href=/tags/Workflow rel=tag>Workflow</a></div></article></div><nav class="post-navigation mt-4 level is-mobile"><div class=level-start><a class="article-nav-prev level level-item link-muted" href=https://blog.imaple.net/posts/deploy_kms/><i class="level-item fas fa-chevron-left"></i>
+<span class=level-item>关于 Kms 服务器</span></a></div><div class=level-end><a class="article-nav-next level level-item link-muted" href=https://blog.imaple.net/posts/fix_githubusercontent/><span class=level-item>解决 raw.githubusercontent.com 无法访问</span>
+<i class="level-item fas fa-chevron-right"></i></a></div></nav><div class=card><div class=card-content><h3 class="title is-5">评论</h3><div id=comment-container></div><link rel=stylesheet href=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.6.2/gitalk.min.css><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.6.2/gitalk.min.js></script><script>const gitalk=new Gitalk({id:"db723e4b5e651b4a2ce506eb954c6178",repo:"imaple.github.io",owner:"iMaple",clientID:"376411df254e5e681ea6",clientSecret:"69fd9b70865e7a062eb1ce4da8a2fb509023df89",admin:["iMaple"],createIssueManually:!1,distractionFreeMode:!1,perPage:10,pagerDirection:"last",enableHotKey:!0});gitalk.render("comment-container")</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen order-1"><div class="card widget" data-type=profile><div class=card-content><nav class=level><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src=/img/avatar.webp alt=iMaple></figure><p class="title is-size-4 is-block" style=line-height:inherit>iMaple</p><p class="is-size-6 is-block">说有意义的话，做有意义的事</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i>
+<span>地球, 太阳系</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class=heading>文章</p><a href=/archives><p class=title>11</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class=heading>分类</p><a href=/categories><p class=title>6</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class=heading>标签</p><a href=/tags><p class=title>12</p></a></div></div></nav><div class=level><a class="level-item button is-primary is-rounded" href=https://github.com/imaple target=_blank rel=noopener>关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" title=Gitlab href=https://gitlab.com/imaple target=_blank rel=noopener><i class="fab fa-gitlab"></i>
+</a><a class="level-item button is-transparent is-marginless" title=Telegram href=https://telegram.me/imaple target=_blank rel=noopener><i class="fab fa-telegram"></i>
+</a><a class="level-item button is-transparent is-marginless" title=Mail href=mailto:imaple.org@gmail.com target=_blank rel=noopener><i class="fas fa-envelope"></i>
+</a><a class="level-item button is-transparent is-marginless" title=RSS href=/index.xml target=_blank rel=noopener><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" data-type=categories><div class=card-content><div class=menu><h3 class=menu-label>分类</h3><ul class=menu-list><li><a class="level is-mobile" href=/categories/%e5%a4%87%e5%bf%98><span class=level-start><span class=level-item>备忘</span>
+</span><span class=level-end><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href=/categories/%e6%8a%80%e6%9c%af><span class=level-start><span class=level-item>技术</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e6%97%a5%e5%b8%b8><span class=level-start><span class=level-item>日常</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e6%b8%b8%e6%88%8f><span class=level-start><span class=level-item>游戏</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e7%ae%97%e6%b3%95><span class=level-start><span class=level-item>算法</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/categories/%e9%83%a8%e7%bd%b2><span class=level-start><span class=level-item>部署</span>
+</span><span class=level-end><span class="level-item tag">4</span></span></a></li></ul></div></div></div><div class="card widget" data-type=tags><div class=card-content><div class=menu><h3 class=menu-label>标签</h3><div class="field is-grouped is-grouped-multiline"><div class=control><a class="tags has-addons" href=/tags/algorithm><span class=tag>algorithm</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/certificate><span class=tag>certificate</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/don%27t%20ask><span class=tag>don't ask</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/git><span class=tag>git</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/hugo><span class=tag>hugo</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/mail><span class=tag>mail</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/minecraft><span class=tag>minecraft</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/nginx><span class=tag>nginx</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/sqlite><span class=tag>sqlite</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/teamspeak3><span class=tag>teamspeak3</span>
+<span class=tag>1</span></a></div><div class=control><a class="tags has-addons" href=/tags/tls><span class=tag>tls</span>
+<span class=tag>3</span></a></div><div class=control><a class="tags has-addons" href=/tags/workflow><span class=tag>workflow</span>
+<span class=tag>2</span></a></div></div></div></div></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type=recent-posts><div class=card-content><h3 class=menu-label>最新文章</h3><article class=media><figure class=media-left><a class=image href=https://blog.imaple.net/posts/auto_hugo/><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/06d0c0fa95f0fa681f61aa1ba0c97ec7-53324e.webp alt="利用 GitHub Action 自动部署博客"></a></figure><div class=media-content><p class=date><time datetime=2020-09-11T10:19:18+08:00>2020-09-11</time></p><p class=title><a href=https://blog.imaple.net/posts/auto_hugo/>利用 GitHub Action 自动部署博客</a></p><p class=categories><a href=/categories/%e9%83%a8%e7%bd%b2>部署</a></p></div></article><article class=media><div class=media-content><p class=date><time datetime=2020-08-26T18:37:45+08:00>2020-08-26</time></p><p class=title><a href=https://blog.imaple.net/posts/deploy_kms/>关于 Kms 服务器</a></p><p class=categories><a href=/categories/%e5%a4%87%e5%bf%98>备忘</a></p></div></article><article class=media><figure class=media-left><a class=image href=https://blog.imaple.net/posts/auto_acme/><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/19f0a24b34107b97c23f99149f476410-3512c8.webp alt="利用 GitHub Action 自动续签 SSL 证书"></a></figure><div class=media-content><p class=date><time datetime=2020-06-06T16:40:16+08:00>2020-06-06</time></p><p class=title><a href=https://blog.imaple.net/posts/auto_acme/>利用 GitHub Action 自动续签 SSL 证书</a></p><p class=categories><a href=/categories/%e9%83%a8%e7%bd%b2>部署</a></p></div></article><article class=media><div class=media-content><p class=date><time datetime=2020-05-14T20:58:46+08:00>2020-05-14</time></p><p class=title><a href=https://blog.imaple.net/posts/fix_githubusercontent/>解决 raw.githubusercontent.com 无法访问</a></p><p class=categories><a href=/categories/%e5%a4%87%e5%bf%98>备忘</a></p></div></article><article class=media><figure class=media-left><a class=image href=https://blog.imaple.net/posts/algorithm_sort/><img src=https://raw.githubusercontent.com/iMaple/imaple.github.io/assets/img/8d652081532be39da5ad48fabc49b5e8-978a91.webp alt=常见的十个排序算法></a></figure><div class=media-content><p class=date><time datetime=2020-04-18T18:42:15+08:00>2020-04-18</time></p><p class=title><a href=https://blog.imaple.net/posts/algorithm_sort/>常见的十个排序算法</a></p><p class=categories><a href=/categories/%e7%ae%97%e6%b3%95>算法</a></p></div></article></div></div><div class="card widget" data-type=archives><div class=card-content><div class=menu><h3 class=menu-label>归档</h3><ul class=menu-list><li><a class="level is-mobile" href=/archives/#2020-09><span class=level-start><span class=level-item>2020年 9月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-08><span class=level-start><span class=level-item>2020年 8月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-06><span class=level-start><span class=level-item>2020年 6月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-05><span class=level-start><span class=level-item>2020年 5月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-04><span class=level-start><span class=level-item>2020年 4月</span>
+</span><span class=level-end><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-02><span class=level-start><span class=level-item>2020年 2月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href=/archives/#2020-01><span class=level-start><span class=level-item>2020年 1月</span>
+</span><span class=level-end><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href=/archives/#2019-12><span class=level-start><span class=level-item>2019年 12月</span>
+</span><span class=level-end><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type=links><div class=card-content><div class=menu><h3 class=menu-label>链接</h3><ul class=menu-list><li><a class="level is-mobile" href=https://gohugo.io target=_blank rel=noopener><span class=level-left><span class=level-item>Hugo</span></span>
+<span class=level-right><span class="level-item tag">gohugo.io</span></span></a></li><li><a class="level is-mobile" href=https://github.com/iMaple/hugo-theme-icarus target=_blank rel=noopener><span class=level-left><span class=level-item>icarus</span></span>
+<span class=level-right><span class="level-item tag">github.com</span></span></a></li></ul></div></div></div><div class="card widget" data-type=subscribe-email><div class=card-content><div class=menu><h3 class=menu-label>订阅更新</h3><form action=https://feedburner.google.com/fb/a/mailverify method=post target=popupwindow onsubmit='return window.open("https://feedburner.google.com/fb/a/mailverify?uri=imaple","popupwindow","scrollbars=yes,width=550,height=520"),!0'><input type=hidden value=imaple name=uri>
+<input type=hidden name=loc value=en_US><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class=input name=email type=email placeholder=Email>
+<span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class=control><input class=button type=submit value=订阅></div></div><p class=help>Powered by Google feedburner</p></form></div></div></div></div></div></div></section><footer class=footer><div class=container><div class=level><div class=level-start><a class="footer-logo is-block mb-2" href=/><img src=/img/logo.svg alt="404 Page not found" height=28></a><p class=is-size-7><span>&copy; 2020 - 2024 </span>&nbsp;&nbsp;Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>&nbsp;&&nbsp;<a href=https://github.com/iMaple/hugo-theme-icarus/ target=_blank rel=noopener>Icarus</a><br><span id=busuanzi_container_site_uv>共
+<span id=busuanzi_value_site_uv>0</span>
+个访客</span></p></div><div class=level-end><div class="field has-addons"><p class=control><a class="button is-transparent is-large" title="Creative Commons" href=https://creativecommons.org/ target=_blank rel=noopener><i class="fab fa-creative-commons"></i></a></p></div></div></div></div></footer><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.5.1/jquery.min.js></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/moment.js/2.26.0/moment-with-locales.min.js></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/clipboard.js/2.0.4/clipboard.min.js defer></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/9.18.1/highlight.min.js></script><script>moment.locale("zh-cn")</script><script>var IcarusThemeSettings={article:{highlight:{clipboard:!0,fold:"unfolded"}},toc:{index:!0}}</script><script type=text/javascript src=/js/column.js></script><script type=text/javascript src=/js/animation.js></script><a id=back-to-top title=回到顶端 href=javascript:;><i class="fas fa-chevron-up"></i>
+</a><script type=text/javascript src=/js/back2top.js defer></script><script type=text/javascript src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/cookieconsent/3.1.1/cookieconsent.min.js defer></script><script>window.addEventListener("load",()=>{window.cookieconsent.initialise({type:"info",theme:"edgeless",static:!1,position:"bottom-left",content:{message:"此网站使用Cookie来改善您的体验。",dismiss:"知道了！",allow:"允许使用Cookie",deny:"拒绝",link:"了解更多",policy:"Cookie政策",href:"https://www.cookiesandyou.com/"},palette:{popup:{background:"#edeff5",text:"#838391"},button:{background:"#4b81e8"}}})})</script><script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+      'HTML-CSS': {matchFontHeight: false},
+      SVG: {matchFontHeight: false},
+      CommonHTML: {matchFontHeight: false},
+      tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+    </script><script type=text/javascript src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><script src=https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/smoothscroll/1.4.10/SmoothScroll.min.js async></script><script type=text/javascript src=/js/main.js defer></script><div class=searchbox><div class=searchbox-container><div class=searchbox-header><div class=searchbox-input-container><input class=searchbox-input type=text placeholder=想要查找什么...></div><a class=searchbox-close href=javascript:;>×</a></div><div class=searchbox-body></div></div></div><script type=text/javascript src=/js/insight.js defer></script><script>document.addEventListener("DOMContentLoaded",function(){loadInsight({contentUrl:"/index.json"},{hint:"想要查找什么...",untitled:"(无标题)",posts:"文章",pages:"页面",categories:"分类",tags:"标签"})})</script></body></html>
